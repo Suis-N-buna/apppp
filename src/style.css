@@ -1,0 +1,1014 @@
+/* ==========================================================================
+   숭실대학교 기숙사 생활 도우미 (SSU DORM) - 메인 스타일시트
+   - 메인 색상: 네이비 #1f3a5f
+   - 포인트 색상: 하늘색 #4f8fc0
+   - 배경 색상: 연한 회색 #f5f7fa
+   - 카드 배경: 흰색 #ffffff
+   - 최대 너비 520px 모바일 퍼스트 레이아웃
+   ========================================================================== */
+
+/* 1. 디자인 토큰 및 CSS 변수 선언 */
+:root {
+  /* 주요 테마 색상 */
+  --color-primary: #1f3a5f;        /* 숭실 네이비 메인 */
+  --color-primary-hover: #2d507d;  /* 버튼 hover 색상 */
+  --color-point: #4f8fc0;          /* 하늘색 포인트 */
+  --color-point-light: #e8f2f8;    /* 연한 포인트 배경 */
+  
+  /* 기본 배경 및 표면 */
+  --color-bg: #f5f7fa;             /* 전체 배경 */
+  --color-card: #ffffff;           /* 카드 배경 */
+  --color-card-sub: #f8fafc;       /* 보조 카드 배경 */
+  --color-border: #e2e8f0;         /* 테두리 색상 */
+  --color-divider: #edf2f7;        /* 구분선 */
+
+  /* 텍스트 색상 */
+  --color-text-title: #1a273a;     /* 제목 텍스트 */
+  --color-text-body: #334155;      /* 본문 텍스트 */
+  --color-text-muted: #64748b;     /* 보조/설명 텍스트 */
+  --color-text-white: #ffffff;     /* 흰색 텍스트 */
+
+  /* 상태별 색상 (사용 가능 / 사용 중 / 고장) */
+  --status-available-text: #166534; /* 사용 가능 진한 초록 */
+  --status-available-bg: #dcfce7;   /* 사용 가능 연한 초록 배경 */
+  --status-available-border: #86efac;
+
+  --status-inuse-text: #b45309;     /* 사용 중 진한 주황 */
+  --status-inuse-bg: #fef3c7;       /* 사용 중 연한 주황 배경 */
+  --status-inuse-border: #fcd34d;
+
+  --status-broken-text: #b91c1c;    /* 고장/긴급 진한 빨강 */
+  --status-broken-bg: #fee2e2;      /* 고장 연한 빨강 배경 */
+  --status-broken-border: #fca5a5;
+
+  /* 중요 공지 색상 (연한 노란색) */
+  --notice-important-bg: #fffbeb;
+  --notice-important-border: #f59e0b;
+  --notice-important-badge: #d97706;
+
+  /* 규격 및 효과 */
+  --radius-card: 12px;             /* 카드 모서리 반경 */
+  --radius-input: 8px;             /* 입력칸 모서리 반경 */
+  --radius-button: 8px;            /* 버튼 모서리 반경 */
+  --radius-badge: 6px;             /* 배지 모서리 반경 */
+  --shadow-soft: 0 4px 12px rgba(31, 58, 95, 0.06);
+  --shadow-hover: 0 6px 16px rgba(31, 58, 95, 0.12);
+  --transition-fast: all 0.2s ease-in-out;
+}
+
+/* 2. 다크 모드 스타일 변수 */
+body.dark-mode {
+  --color-primary: #4f8fc0;
+  --color-primary-hover: #67a3d3;
+  --color-point: #7db7e8;
+  --color-point-light: #1e3a5f;
+
+  --color-bg: #0d1520;
+  --color-card: #172334;
+  --color-card-sub: #1c2c40;
+  --color-border: #263952;
+  --color-divider: #263952;
+
+  --color-text-title: #f1f5f9;
+  --color-text-body: #cbd5e1;
+  --color-text-muted: #94a3b8;
+
+  --status-available-text: #4ade80;
+  --status-available-bg: rgba(34, 197, 94, 0.15);
+  --status-available-border: rgba(34, 197, 94, 0.3);
+
+  --status-inuse-text: #fbbf24;
+  --status-inuse-bg: rgba(245, 158, 11, 0.15);
+  --status-inuse-border: rgba(245, 158, 11, 0.3);
+
+  --status-broken-text: #f87171;
+  --status-broken-bg: rgba(239, 68, 68, 0.15);
+  --status-broken-border: rgba(239, 68, 68, 0.3);
+
+  --notice-important-bg: #2b2512;
+  --notice-important-border: #b45309;
+  --notice-important-badge: #fbbf24;
+
+  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+/* 3. 기본 리셋 및 전역 스타일 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: '맑은 고딕', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-body);
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 앱 전체 래퍼 (최대 너비 520px 모바일 뷰) */
+#app-container {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 90px; /* 하단 네비게이션 높이 확보 */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+}
+
+/* 4. 상단 헤더 영역 */
+.app-header {
+  background-color: var(--color-card);
+  padding: 20px 18px 16px 18px;
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.brand-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+}
+
+/* 다크모드 토글 버튼 */
+.btn-theme-toggle {
+  background: var(--color-card-sub);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-title);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-theme-toggle:hover {
+  background-color: var(--color-point-light);
+  transform: scale(1.05);
+}
+
+.header-bottom {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.brand-subtitle {
+  font-size: 0.88rem;
+  color: var(--color-point);
+  font-weight: 600;
+}
+
+.current-date {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* 5. 메인 컨텐츠 영역 */
+.main-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 6. 공통 카드 스타일 */
+.card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-card);
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.section-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--color-text-title);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.section-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-subtitle {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  font-weight: normal;
+  margin-bottom: 12px;
+}
+
+/* 7. 홈/인사말 & 요약 섹션 */
+.greeting-box {
+  background: linear-gradient(135deg, rgba(31, 58, 95, 0.08) 0%, rgba(79, 143, 192, 0.12) 100%);
+  border: 1px solid rgba(79, 143, 192, 0.2);
+  border-radius: var(--radius-card);
+  padding: 16px;
+}
+
+body.dark-mode .greeting-box {
+  background: linear-gradient(135deg, rgba(31, 58, 95, 0.3) 0%, rgba(79, 143, 192, 0.2) 100%);
+}
+
+.greeting-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-title);
+  margin-bottom: 6px;
+}
+
+/* 오늘의 기숙사 한마디 */
+.quote-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-card);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  margin-top: 10px;
+  border: 1px dashed var(--color-point);
+  font-size: 0.86rem;
+  color: var(--color-text-body);
+}
+
+.quote-text {
+  font-weight: 500;
+}
+
+.quote-refresh-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  opacity: 0.7;
+  transition: transform 0.2s;
+}
+
+.quote-refresh-btn:hover {
+  opacity: 1;
+  transform: rotate(45deg);
+}
+
+/* 요약 통계 칩 목록 */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.summary-item {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.summary-item:hover {
+  border-color: var(--color-point);
+  transform: translateY(-2px);
+}
+
+.summary-icon {
+  font-size: 1.35rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.summary-label {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  display: block;
+}
+
+.summary-value {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--color-text-title);
+  margin-top: 2px;
+  display: block;
+}
+
+/* 8. 상태 배지 (사용 가능 / 사용 중 / 고장) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-badge);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.badge-available {
+  background-color: var(--status-available-bg);
+  color: var(--status-available-text);
+  border: 1px solid var(--status-available-border);
+}
+
+.badge-inuse {
+  background-color: var(--status-inuse-bg);
+  color: var(--status-inuse-text);
+  border: 1px solid var(--status-inuse-border);
+}
+
+.badge-broken {
+  background-color: var(--status-broken-bg);
+  color: var(--status-broken-text);
+  border: 1px solid var(--status-broken-border);
+}
+
+/* 9. 세탁실 현황 스타일 */
+.machine-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-card-sub);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-input);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.tab-btn.active {
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
+  border-color: var(--color-primary);
+}
+
+.machine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.machine-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: var(--color-card-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  transition: var(--transition-fast);
+}
+
+.machine-card:hover {
+  border-color: var(--color-point);
+}
+
+.machine-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.machine-icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background-color: var(--color-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  border: 1px solid var(--color-border);
+}
+
+.machine-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-title);
+  margin-bottom: 2px;
+}
+
+.machine-detail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time-remaining {
+  font-weight: 700;
+  color: var(--status-inuse-text);
+}
+
+/* 10. 공통 버튼 스타일 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: var(--radius-button);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--color-card-sub);
+  color: var(--color-text-body);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-divider);
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* 11. 택배 확인 스타일 */
+.delivery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.delivery-card {
+  padding: 12px;
+  background-color: var(--color-card-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-fast);
+}
+
+.delivery-card:hover {
+  border-color: var(--color-point);
+}
+
+.delivery-company {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text-title);
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.delivery-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.delivery-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* 12. 시설 고장 신고 폼 스타일 */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--color-text-title);
+  margin-bottom: 6px;
+}
+
+.required-mark {
+  color: var(--status-broken-text);
+  margin-left: 2px;
+}
+
+/* 입력칸 공통: 너비 100%, 패딩 10px, 둥근 모서리 8px */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-card);
+  color: var(--color-text-body);
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+/* 포커스 시 파란색 테두리와 연한 파란색 그림자 */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--color-point);
+  box-shadow: 0 0 0 3px rgba(79, 143, 192, 0.25);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* 긴급도 라디오 버튼 가로 배치 */
+.radio-group-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px;
+}
+
+.radio-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--color-text-body);
+}
+
+.radio-item input[type="radio"] {
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.form-btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.form-btn-group .btn {
+  flex: 1;
+  padding: 11px;
+  font-size: 0.9rem;
+}
+
+/* 신고 접수 완료 메시지 */
+.report-notice-box {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: var(--radius-input);
+  background-color: var(--status-available-bg);
+  border: 1px solid var(--status-available-border);
+  color: var(--status-available-text);
+  font-size: 0.86rem;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.report-notice-box.show {
+  display: block;
+}
+
+/* 13. 공용 물품 대여 스타일 */
+.rental-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rental-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: var(--color-card-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  transition: var(--transition-fast);
+}
+
+.rental-card:hover {
+  border-color: var(--color-point);
+}
+
+.rental-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rental-icon {
+  font-size: 1.4rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background-color: var(--color-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+}
+
+.rental-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text-title);
+  margin-bottom: 2px;
+}
+
+/* 14. 기숙사 공지 스타일 */
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notice-card {
+  padding: 14px;
+  background-color: var(--color-card-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  transition: var(--transition-fast);
+}
+
+.notice-card:hover {
+  border-color: var(--color-point);
+}
+
+/* 중요 공지는 연한 노란색 배경으로 강조 */
+.notice-card.important {
+  background-color: var(--notice-important-bg);
+  border: 1px solid var(--notice-important-border);
+  border-left: 5px solid var(--notice-important-badge);
+}
+
+.notice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.notice-category-badge {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--color-point-light);
+  color: var(--color-point);
+}
+
+.notice-card.important .notice-category-badge {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: var(--notice-important-badge);
+}
+
+.notice-date {
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+}
+
+.notice-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--color-text-title);
+  margin-bottom: 4px;
+}
+
+.notice-content {
+  font-size: 0.83rem;
+  color: var(--color-text-body);
+  line-height: 1.45;
+}
+
+/* 15. 모바일 하단 네비게이션 메뉴 (하단 고정) */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--color-card);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 6px 12px 6px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: var(--transition-fast);
+  text-decoration: none;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.nav-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  color: var(--color-point);
+}
+
+body:not(.dark-mode) .nav-item.active {
+  color: var(--color-primary);
+}
+
+/* 16. 토스트 알림창 */
+.toast {
+  position: fixed;
+  bottom: 74px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background-color: var(--color-text-title);
+  color: var(--color-card);
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 17. 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 18. 엑셀 실시간 연동 및 스프레드시트 뷰 스타일 */
+.excel-panel {
+  margin-top: 18px;
+  background-color: var(--color-card-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  padding: 14px;
+}
+
+.excel-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.excel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.excel-icon {
+  font-size: 1.25rem;
+}
+
+.excel-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-title);
+}
+
+.excel-count-badge {
+  background-color: #107c41;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.excel-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Microsoft Excel 시그니처 그린 색상 버튼 */
+.btn-excel {
+  background-color: #107c41 !important;
+  color: #ffffff !important;
+  border: none;
+  font-weight: 700;
+}
+
+.btn-excel:hover {
+  background-color: #0d6334 !important;
+  transform: translateY(-1px);
+}
+
+.excel-info-text {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* 엑셀 스프레드시트 테이블 래퍼 */
+.excel-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-card);
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.excel-table th {
+  background-color: #f1f5f9;
+  color: #334155;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+body.dark-mode .excel-table th {
+  background-color: #1e2c3d;
+  color: #cbd5e1;
+}
+
+.excel-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--color-divider);
+  border-right: 1px solid var(--color-divider);
+  color: var(--color-text-body);
+}
+
+.excel-table tr:hover td {
+  background-color: rgba(79, 143, 192, 0.08);
+}
+
+.excel-table tr.new-row td {
+  animation: highlightRow 1.8s ease-out;
+}
+
+@keyframes highlightRow {
+  0% {
+    background-color: rgba(16, 124, 65, 0.25);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.excel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 6px;
+}
+
+.btn-text-action {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--color-point);
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.btn-text-action:hover {
+  text-decoration: underline;
+}
+
+.btn-text-action.text-danger {
+  color: var(--status-broken-text);
+}
+

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SSU DORM - 숭실대학교 기숙사 생활 도우미</title>
+    <meta name="description" content="숭실대학교 기숙사 학생들을 위한 세탁실 현황, 택배 확인, 시설 고장 신고, 물품 대여 및 기숙사 공지 통합 생활 도우미 웹앱" />
+    <meta property="og:title" content="SSU DORM - 숭실대학교 기숙사 생활 도우미" />
+    <meta property="og:description" content="숭실대학교 기숙사 학생들을 위한 세탁실 현황, 택배 확인, 시설 고장 신고, 물품 대여 및 기숙사 공지 통합 생활 도우미 웹앱" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- 숭실대학교 기숙사 도우미 전용 스타일시트 연결 -->
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- 모바일 화면 기준 최대 너비 520px 중앙 정렬 컨테이너 -->
+    <div id="app-container">
+      
+      <!-- ====================================================================
+           [페이지 상단 헤더]
+           - 로고: 🏠 이모지
+           - 앱 이름: SSU DORM
+           - 부제: 더 편리한 숭실대학교 기숙사 생활
+           - 현재 날짜 표시
+           - 우측 상단: 🌙 다크모드 버튼
+           ==================================================================== -->
+      <header class="app-header">
+        <div class="header-top">
+          <div class="brand">
+            <span class="brand-icon" role="img" aria-label="기숙사 홈 아이콘">🏠</span>
+            <h1 class="brand-title">SSU DORM</h1>
+          </div>
+          <!-- 다크 모드 전환 버튼 -->
+          <button id="btn-theme-toggle" class="btn-theme-toggle" type="button" aria-label="다크 모드 전환" title="다크 모드로 전환">
+            🌙
+          </button>
+        </div>
+        <div class="header-bottom">
+          <p class="brand-subtitle">더 편리한 숭실대학교 기숙사 생활</p>
+          <span id="current-date" class="current-date">2026년 10월 1일 (목)</span>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+           [메인 본문 영역]
+           ==================================================================== -->
+      <main class="main-content">
+
+        <!-- ------------------------------------------------------------------
+             메인 화면 (홈 섹션)
+             - 인사말
+             - 오늘의 기숙사 한마디
+             - 오늘의 기숙사 정보 요약 (세탁기, 택배, 공지)
+             ------------------------------------------------------------------ -->
+        <section id="home" class="greeting-box">
+          <h2 class="greeting-title">안녕하세요! 숭실 사생 여러분 💙</h2>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted);">
+            오늘 하루도 편안하고 쾌적한 기숙사 생활을 응원합니다.
+          </p>
+
+          <!-- 오늘의 기숙사 한마디 -->
+          <div class="quote-box">
+            <div>
+              <span style="font-size: 0.82rem; color: var(--color-point); font-weight: 700; margin-right: 4px;">[오늘의 한마디]</span>
+              <span id="dorm-quote-text" class="quote-text">세탁이 끝난 빨래는 빠르게 수거해주세요 🧺</span>
+            </div>
+            <button id="btn-quote-refresh" class="quote-refresh-btn" type="button" title="다른 팁 보기">
+              🔄
+            </button>
+          </div>
+
+          <!-- 상단 동적 요약 정보 그리드 -->
+          <div class="summary-grid">
+            <a href="#laundry" class="summary-item" style="text-decoration: none;">
+              <span class="summary-icon">🧺</span>
+              <span class="summary-label">세탁실 현황</span>
+              <span id="summary-laundry" class="summary-value">사용 가능한 세탁기 3대</span>
+            </a>
+            <a href="#delivery" class="summary-item" style="text-decoration: none;">
+              <span class="summary-icon">📦</span>
+              <span class="summary-label">미수령 택배</span>
+              <span id="summary-delivery" class="summary-value">도착한 택배 2개</span>
+            </a>
+            <a href="#notice" class="summary-item" style="text-decoration: none;">
+              <span class="summary-icon">📢</span>
+              <span class="summary-label">기숙사 공지</span>
+              <span id="summary-notice" class="summary-value">새로운 공지 1개</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             1. 세탁실 현황
+             - 세탁기와 건조기 상태 카드 목록
+             - 사용 가능 / 사용 중 / 고장 표시
+             - [사용 시작] 클릭 시 상태 '사용 중' 전환 및 40분 타이머 가동
+             ------------------------------------------------------------------ -->
+        <section id="laundry" class="card">
+          <div class="section-title">
+            <div class="section-title-left">
+              <span>🧺</span>
+              <span>1. 세탁실 현황</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: normal;">실시간 조회</span>
+          </div>
+          <p class="section-subtitle">숭실대학교 기숙사 지하 1층 세탁실 현황입니다.</p>
+
+          <!-- 세탁기 / 건조기 필터 탭 -->
+          <div class="machine-tabs">
+            <button type="button" class="tab-btn machine-tab-btn active" data-tab="all">전체 보기</button>
+            <button type="button" class="tab-btn machine-tab-btn" data-tab="washer">세탁기만</button>
+            <button type="button" class="tab-btn machine-tab-btn" data-tab="dryer">건조기만</button>
+          </div>
+
+          <!-- 세탁기 / 건조기 카드 렌더링 영역 (JavaScript로 동적 출력) -->
+          <div id="machine-list-container" class="machine-list">
+            <!-- 자바스크립트로 세탁기/건조기 카드가 렌더링됩니다 -->
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             2. 택배 확인
+             - 택배사, 상품명, 도착 시간, 수령 상태
+             - [수령 완료] 버튼 클릭 시 상태 변경
+             ------------------------------------------------------------------ -->
+        <section id="delivery" class="card">
+          <div class="section-title">
+            <div class="section-title-left">
+              <span>📦</span>
+              <span>2. 택배 확인</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: normal;">무인 택배함</span>
+          </div>
+          <p class="section-subtitle">도착한 택배 목록을 확인하고 수령 완료 처리하세요.</p>
+
+          <!-- 택배 목록 카드 렌더링 영역 -->
+          <div id="delivery-list-container" class="delivery-list">
+            <!-- 자바스크립트로 택배 목록이 동적 렌더링됩니다 -->
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             3. 시설 고장 신고
+             - 신고 입력 폼 (모든 input에 label 연결)
+             - 이름, 위치, 고장 종류(드롭다운), 긴급도(라디오), 상세 내용(textarea)
+             - 신고하기, 다시 작성 버튼
+             - 유효성 검사 및 접수 완료 메시지 표시
+             ------------------------------------------------------------------ -->
+        <section id="report" class="card">
+          <div class="section-title">
+            <div class="section-title-left">
+              <span>🛠</span>
+              <span>3. 시설 고장 신고</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: normal;">시설관리팀</span>
+          </div>
+          <p class="section-subtitle">호실 또는 공용 구역에 문제가 생기면 즉시 접수해주세요.</p>
+
+          <form id="repair-form" novalidate>
+            <!-- 1. 이름 또는 닉네임 -->
+            <div class="form-group">
+              <label for="reporter-name" class="form-label">
+                1. 이름 또는 닉네임 <span class="required-mark">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="reporter-name" 
+                name="reporter-name" 
+                class="form-input" 
+                placeholder="예: 김숭실" 
+                required 
+              />
+            </div>
+
+            <!-- 2. 위치 -->
+            <div class="form-group">
+              <label for="repair-location" class="form-label">
+                2. 위치 <span class="required-mark">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="repair-location" 
+                name="repair-location" 
+                class="form-input" 
+                placeholder="예: 301호, 5층 세탁실, 2층 공용 화장실" 
+                required 
+              />
+            </div>
+
+            <!-- 3. 고장 종류 -->
+            <div class="form-group">
+              <label for="repair-category" class="form-label">
+                3. 고장 종류 <span class="required-mark">*</span>
+              </label>
+              <select id="repair-category" name="repair-category" class="form-select" required>
+                <option value="">고장 종류를 선택해주세요</option>
+                <option value="전등">전등</option>
+                <option value="에어컨">에어컨</option>
+                <option value="난방">난방</option>
+                <option value="수도">수도</option>
+                <option value="화장실">화장실</option>
+                <option value="세탁기">세탁기</option>
+                <option value="인터넷/Wi-Fi">인터넷/Wi-Fi</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+
+            <!-- 4. 긴급도 (라디오 버튼 가로 배치) -->
+            <div class="form-group">
+              <span class="form-label">4. 긴급도</span>
+              <div class="radio-group-container">
+                <label for="urgency-low" class="radio-item">
+                  <input type="radio" id="urgency-low" name="urgency" value="낮음" />
+                  <span>낮음</span>
+                </label>
+                <label for="urgency-normal" class="radio-item">
+                  <input type="radio" id="urgency-normal" name="urgency" value="보통" checked />
+                  <span>보통</span>
+                </label>
+                <label for="urgency-high" class="radio-item">
+                  <input type="radio" id="urgency-high" name="urgency" value="긴급" />
+                  <span>긴급</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 5. 상세 내용 -->
+            <div class="form-group">
+              <label for="repair-details" class="form-label">5. 상세 내용</label>
+              <textarea 
+                id="repair-details" 
+                name="repair-details" 
+                class="form-textarea" 
+                placeholder="고장 증상이나 관리자분께 전달할 내용을 상세히 입력해주세요."
+              ></textarea>
+            </div>
+
+            <!-- 6. 신고하기 & 7. 다시 작성 버튼 -->
+            <div class="form-btn-group">
+              <button type="submit" id="btn-submit-repair" class="btn btn-primary">
+                신고하기
+              </button>
+              <button type="reset" id="btn-reset-repair" class="btn btn-secondary">
+                다시 작성
+              </button>
+            </div>
+          </form>
+
+          <!-- 정상 입력 시 나타나는 접수 완료 안내 메시지 -->
+          <div id="repair-success-msg" class="report-notice-box" role="status"></div>
+
+          <!-- ==========================================================
+               [엑셀 실시간 연동 및 다운로드 영역]
+               - 폼에서 입력한 신고 값이 실시간으로 엑셀 대장에 누적
+               - .xlsx 및 .csv 다운로드 지원
+               ========================================================== -->
+          <div class="excel-panel">
+            <div class="excel-header-bar">
+              <div class="excel-title-group">
+                <span class="excel-icon">📊</span>
+                <span class="excel-title">실시간 엑셀 접수 대장</span>
+                <span id="excel-count-badge" class="excel-count-badge">0건</span>
+              </div>
+              <div class="excel-actions">
+                <button type="button" id="btn-download-excel" class="btn btn-excel btn-sm" title="Microsoft Excel (.xlsx) 파일 다운로드">
+                  📥 엑셀(.xlsx) 다운로드
+                </button>
+                <button type="button" id="btn-download-csv" class="btn btn-secondary btn-sm" title="CSV 파일 다운로드">
+                  📄 CSV
+                </button>
+              </div>
+            </div>
+
+            <p class="excel-info-text">
+              💡 입력한 모든 신고 내역이 엑셀 서식에 실시간으로 자동 정리되며, 클릭 한 번으로 엑셀 파일(.xlsx)을 다운로드할 수 있습니다.
+            </p>
+
+            <!-- 엑셀 스프레드시트 뷰 테이블 -->
+            <div class="excel-table-wrapper">
+              <table class="excel-table">
+                <thead>
+                  <tr>
+                    <th>연번</th>
+                    <th>접수일시</th>
+                    <th>신고자</th>
+                    <th>위치</th>
+                    <th>고장종류</th>
+                    <th>긴급도</th>
+                    <th>상세내용</th>
+                    <th>처리상태</th>
+                  </tr>
+                </thead>
+                <tbody id="excel-table-body">
+                  <!-- 자바스크립트로 엑셀 행 데이터가 실시간 추가됩니다 -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="excel-footer">
+              <button type="button" id="btn-add-sample-report" class="btn-text-action">
+                + 테스트 샘플 추가
+              </button>
+              <button type="button" id="btn-clear-reports" class="btn-text-action text-danger">
+                대장 비우기
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             4. 공용 물품 대여
+             - 공구 세트, 청소기, 보드게임, 우산, 멀티탭
+             - 대여 가능 / 대여 중 상태
+             - [대여하기] 클릭 시 confirm 창 팝업 후 상태 변경
+             ------------------------------------------------------------------ -->
+        <section id="rental" class="card">
+          <div class="section-title">
+            <div class="section-title-left">
+              <span>🤝</span>
+              <span>4. 공용 물품 대여</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: normal;">행정실 보관</span>
+          </div>
+          <p class="section-subtitle">숭실대학교 사생들을 위한 무료 공용 물품 대여 서비스입니다.</p>
+
+          <!-- 공용 물품 목록 -->
+          <div id="rental-list-container" class="rental-list">
+            <!-- 자바스크립트로 물품 목록이 렌더링됩니다 -->
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             5. 기숙사 공지
+             - 중요 공지는 연한 노란색 배경으로 강조
+             - 카테고리, 제목, 날짜, 내용
+             ------------------------------------------------------------------ -->
+        <section id="notice" class="card">
+          <div class="section-title">
+            <div class="section-title-left">
+              <span>📢</span>
+              <span>5. 기숙사 공지</span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: normal;">최신 소식</span>
+          </div>
+          <p class="section-subtitle">생활관 주요 일정 및 안전 수칙 공지사항입니다.</p>
+
+          <div class="notice-list">
+            <!-- [중요] 공지 (노란색 강조 카드) -->
+            <article class="notice-card important">
+              <div class="notice-header">
+                <span class="notice-category-badge">🚨 중요</span>
+                <span class="notice-date">10월 5일</span>
+              </div>
+              <h3 class="notice-title">정기 소방 점검 안내</h3>
+              <p class="notice-content">
+                10월 5일 오전 10시부터 기숙사 전 구역 정기 소방 점검이 진행됩니다. 점검 중 화재경보기가 일시 울릴 수 있으니 당황하지 마시기 바랍니다.
+              </p>
+            </article>
+
+            <!-- [생활] 공지 -->
+            <article class="notice-card">
+              <div class="notice-header">
+                <span class="notice-category-badge">🧺 생활</span>
+                <span class="notice-date">10월 3일</span>
+              </div>
+              <h3 class="notice-title">세탁실 이용 안내</h3>
+              <p class="notice-content">
+                세탁이 끝난 빨래는 다음 사생을 위해 빠르게 수거해주세요. 방치된 세탁물은 임시 보관 바구니로 이동 조치될 수 있습니다.
+              </p>
+            </article>
+
+            <!-- [시설] 공지 -->
+            <article class="notice-card">
+              <div class="notice-header">
+                <span class="notice-category-badge">📶 시설</span>
+                <span class="notice-date">10월 7일</span>
+              </div>
+              <h3 class="notice-title">Wi-Fi 점검 안내</h3>
+              <p class="notice-content">
+                10월 7일 새벽 2시부터 약 1시간 동안 무선 네트워크 장비 교체 작업으로 인터넷 사용이 일시적으로 제한될 수 있습니다.
+              </p>
+            </article>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ====================================================================
+           [하단 네비게이션 메뉴]
+           - 모바일 앱처럼 화면 아래에 고정
+           - 🏠 홈, 🧺 세탁, 📦 택배, 🛠 신고, 📢 공지
+           - 클릭 시 해당 영역으로 부드러운 스크롤 이동
+           ==================================================================== -->
+      <nav class="bottom-nav" aria-label="메인 네비게이션">
+        <a href="#home" class="nav-item active">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">홈</span>
+        </a>
+        <a href="#laundry" class="nav-item">
+          <span class="nav-icon">🧺</span>
+          <span class="nav-label">세탁</span>
+        </a>
+        <a href="#delivery" class="nav-item">
+          <span class="nav-icon">📦</span>
+          <span class="nav-label">택배</span>
+        </a>
+        <a href="#report" class="nav-item">
+          <span class="nav-icon">🛠</span>
+          <span class="nav-label">신고</span>
+        </a>
+        <a href="#notice" class="nav-item">
+          <span class="nav-icon">📢</span>
+          <span class="nav-label">공지</span>
+        </a>
+      </nav>
+
+    </div>
+
+    <!-- 숭실대학교 기숙사 도우미 전용 자바스크립트 로드 -->
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
